@@ -10,7 +10,7 @@
     "deploy":"gh-pages -d dist"
 
   },
-  "homepage":"https://github.com/Jabs69/inventory-system",
+  "homepage":"https://Jabs69.github.io/inventory-system/",
   "dependencies": {
     "@emotion/react": "^11",
     "@emotion/styled": "^11",

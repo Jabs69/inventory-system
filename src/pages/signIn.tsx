@@ -1,46 +1,118 @@
-'use client';
-import * as React from 'react';
 import { SignInPage } from '@toolpad/core/SignInPage';
-import type { Session } from '@toolpad/core/AppProvider';
 import { useNavigate } from 'react-router';
-import { useSession } from '../SessionContext';
+import { login } from '../services/auth';
+import { Button, Typography } from '@mui/material';
 
-const fakeAsyncGetSession = async (formData: any): Promise<Session> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (formData.get('password') === 'password') {
-        resolve({
-          user: {
-            name: 'Bharat Kashyap',
-            email: formData.get('email') || '',
-            image: 'https://avatars.githubusercontent.com/u/19550456',
-          },
-        });
-      }
-      reject(new Error('Incorrect credentials.'));
-    }, 1000);
-  });
-};
 
 export default function SignIn() {
-  const { setSession } = useSession();
   const navigate = useNavigate();
+
+  function submitButton() {
+
+    return (
+
+      <Button
+
+        type='submit'
+        variant='contained'
+        size='large'
+        fullWidth
+        sx={{
+
+          mt:6,
+          py:1
+
+        }}
+
+      >
+        Ingresar
+      </Button>
+
+    )
+
+  }
+
+  function title () {
+
+    return (
+
+      <Typography 
+      
+        variant='h5'
+        textAlign={'center'}
+        fontWeight={600}
+      
+      >
+
+        Sistema de inventario bajo construccion
+
+      </Typography>
+
+    )
+
+  }
+
+  function subtitle () {
+
+    return (
+
+      <Typography
+      
+        variant='body2'
+        gutterBottom
+        color='textSecondary'
+
+      >
+        Por favor ingrese sus credenciales
+      </Typography>
+
+    )
+
+  }
+
+  async function signInHandler(provider: any, formData: any, callbackUrl?: string) {
+    try {
+      const credentials = new URLSearchParams(formData);
+      console.log(await login(credentials));
+      navigate(callbackUrl || '/', { replace: true });
+      return {};
+
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : 'An error occurred' };
+    }
+    return {};
+  }
+
   return (
     <SignInPage
       providers={[{ id: 'credentials', name: 'Credentials' }]}
-      signIn={async (provider, formData, callbackUrl) => {
-        // Demo session
-        try {
-          const session = await fakeAsyncGetSession(formData);
-          if (session) {
-            setSession(session);
-            navigate(callbackUrl || '/', { replace: true });
-            return {};
-          }
-        } catch (error) {
-          return { error: error instanceof Error ? error.message : 'An error occurred' };
+      signIn={signInHandler}
+      slots={{submitButton, title, subtitle}}
+      slotProps={{
+        emailField: {
+          variant: 'standard',
+          name: 'username',
+          type: 'text',
+          label: 'Usuario',
+          placeholder: 'Ingrese su usuario',
+          size: "medium"
+        },
+        passwordField: {
+          variant: 'standard',
+          label: 'Contraseña',
+          placeholder: 'Ingrese su contraseña',
+          size: 'medium'
+        },
+      }}
+      sx={{
+
+        '& .MuiContainer-root > .MuiStack-root': {
+
+          justifyContent:'space-evenly',
+          minHeight:'70vh'
+
         }
-        return {};
+
       }}
     />
   );

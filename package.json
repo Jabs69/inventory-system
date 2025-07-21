@@ -5,8 +5,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy":"bun run build",
+    "deploy":"gh-pages -d dist"
+
   },
+  "homepage":"https://github.com/Jabs69/inventory-system",
   "dependencies": {
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -24,6 +28,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.2",
+    "gh-pages": "^6.3.0",
     "typescript": "^5"
   }
 }

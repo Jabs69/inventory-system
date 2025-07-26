@@ -43,16 +43,14 @@ export default function App() {
   const sessionContextValue = React.useMemo(() => ({ session, setSession }), [session, setSession]);
 
   return (
-    <SessionContext.Provider value={sessionContextValue}>
-      <ReactRouterAppProvider
-        theme={theme}
-        navigation={NAVIGATION}
-        branding={BRANDING}
-        session={session}
-        authentication={{ signIn, signOut }}
-      >
-        <Outlet />
-      </ReactRouterAppProvider>
-    </SessionContext.Provider>
+    <ReactRouterAppProvider
+      theme={theme}
+      navigation={NAVIGATION}
+      branding={BRANDING}
+      // session={session}
+      authentication={{ signIn, signOut }}
+    >
+      <Outlet />
+    </ReactRouterAppProvider>
   );
 }
